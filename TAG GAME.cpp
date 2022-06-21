@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 
+//ходилка стрелками
 // продумать изменение екрана путем его не полного, а лок обновления
 // сделать проверку на выграш
 // таблица аччивок на ТОП5 с сохранением на диске
@@ -48,7 +49,6 @@ void whichNumDraw(const int& id, const int& num);
 void drawField(const int& id);
 void drawGameField(const int* field, const int& SIZE);
 
-
 //// Описание и функционал функций в core.cpp
 int randInt(int min, int max);
 int* genereteField(const int& SIZE);
@@ -89,3 +89,34 @@ int main()
 
 	return 0;
 }
+
+
+///////управление стрелками 
+//#include <iostream>
+//#include <conio.h>
+//
+//int main(int argc, char* argv[]) {
+//	setlocale(0, "rus");
+//	char symbol = _getch();
+//
+//	while ((symbol = _getch())) {
+//		switch (symbol) {
+//		case 72:
+//			std::cout << "Вверх\n";
+//			break;
+//		case 75:
+//			std::cout << "Вниз\n";
+//			break;
+//		case 77:
+//			std::cout << "Вправо\n";
+//			break;
+//		case 80:
+//			std::cout << "Влево\n";
+//			break;
+//		default:
+//			break;
+//		}
+//	}
+//
+//	return 0;
+//}
