@@ -72,6 +72,14 @@ void showpole(const int* field, const int& SIZE)
     std::cout << '\n';
 }
 
+//// Создать копию поля
+void copyField(const int* field, int* copyField, const int& SIZE)
+{
+    for (int i{}; i < SIZE; ++i)
+        copyField[i] = field[i];
+
+}
+
 ////функция перемещения фишек
 void move(int* field, const int& SIZE, int dir)
 {
@@ -79,8 +87,7 @@ void move(int* field, const int& SIZE, int dir)
 
     int* tempArr = new int [SIZE] {};
 
-    for (int i{}; i < SIZE; ++i)
-        tempArr[i] = field[i];
+    copyField(field, tempArr, SIZE);
 
     delete[] field;
 
@@ -140,17 +147,15 @@ void move(int* field, const int& SIZE, int dir)
 }
 
 ////сделать шаг
-void doStep(int* field, const int& SIZE)
+void doStep(int* field, const int& SIZE, int& movCount)
 {
     int dir;
-    std::cout << "Choise direction "; 
-    std::cout << char(27) << ' ' << char(26) << ' ' << char(25) << ' ' << char(24) << '\n';
-    
+
     //std::cin >> dir;
     dir = _getch();
 
     int id0 = whereIs0(field, SIZE);
- 
+
     //Проверка и защита от лома масива  
     if (dir == Move::Down && id0 < 4)
         return;
@@ -163,11 +168,40 @@ void doStep(int* field, const int& SIZE)
 
     //сделать ход
     if (dir == Move::Up)
+    {
         move(field, SIZE, Move::Up);
+        movCount++;
+    }
     else if (dir == Move::Down)
+    {
         move(field, SIZE, Move::Down);
+        movCount++;
+    }
     else if (dir == Move::Left)
+    {
         move(field, SIZE, Move::Left);
+        movCount++;
+    }
     else if (dir == Move::Rigth)
+    {
         move(field, SIZE, Move::Rigth);
+        movCount++;
+    }
+    
 }
+
+////Проверить выграл игрок или нет
+bool isWin(const int* field, const int* wcom,const int& SIZE)
+{
+    int count{};
+
+    for (int i{}; i < SIZE; ++i)
+        if (field[i] == wcom[i])
+            count++;
+
+    if (count == SIZE)
+        return true;
+    else
+        return false;
+}
+

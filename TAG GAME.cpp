@@ -2,7 +2,6 @@
 
 //ходилка стрелками
 // продумать изменение екрана путем его не полного, а лок обновления
-// сделать проверку на выграш
 // таблица аччивок на ТОП5 с сохранением на диске
 // Запрос имени пользователя для топ 5
 // сохранение игры при выходе спрашивать
@@ -28,49 +27,37 @@ enum ConsoleColor
 void setColor(int text, int background = ConsoleColor::Black);
 void setPos(short X, short Y);
 void showMessage(std::string message, ConsoleColor color = ConsoleColor::White);
-int convIdtoY(int id);
-int convIdtoX(int id);
-void draw1(int id);
-void draw2(int id);
-void draw3(int id);
-void draw4(int id);
-void draw5(int id);
-void draw6(int id);
-void draw7(int id);
-void draw8(int id);
-void draw9(int id);
-void draw10(int id);
-void draw11(int id);
-void draw12(int id);
-void draw13(int id);
-void draw14(int id);
-void draw15(int id);
-void whichNumDraw(const int& id, const int& num);
 void drawField(const int& id);
-void drawGameField(const int* field, const int& SIZE);
+void drawGameField(const int* field, const int& SIZE, const int& movCount);
+void showbackground();
 
 //// Описание и функционал функций в core.cpp
-int randInt(int min, int max);
 int* genereteField(const int& SIZE);
-int whereIs0(const int* field, const int& SIZE);
-void showpole(const int* field, const int& SIZE);
 void move(int* field, const int& SIZE, int dir);
-void doStep(int* field, const int& SIZE);
-
-
+void doStep(int* field,const int& SIZE, int& movCount);
+bool isWin(const int* field, const int* wcom, const int& SIZE);
 
 ////Ф-ция игры (цикл)
-void game(int* field, const int& SIZE)
+void game(int* field, const int* wcom, const int& SIZE)
 {
-    while (true)
+    ////счетчик ходов
+    int movCount{};
+
+    ////хранение игрового поля до хода (для выполнения локальной отрисовки игр. поля) 
+    int* lastTurn = new int[SIZE]{};
+    
+    bool play = false;
+    showbackground();
+
+    while (!play)
     {
-        
-        drawGameField(field, SIZE);
-        
-        doStep(field, SIZE);
-        //system("cls");
-        drawGameField(field, SIZE);
+        drawGameField(field, SIZE, movCount);
+        doStep(field, SIZE, movCount);
+        drawGameField(field,SIZE, movCount);
+        play = isWin(field, wcom, SIZE);
     }
+ 
+    std::cout << "GAME OVER\n";
 
 }
 
@@ -79,43 +66,15 @@ int main()
     const int SIZE = 16;
 
     ////тест
-   // int* field = new int[SIZE]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+   //int* field = new int[SIZE]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,0,15};
     
-    //// рабочий вариант
+    //// генерация рандомного поля
     int* field = genereteField(SIZE);
+    //// победная комбинация
+    int* wincom = new int[SIZE] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0};
 
-    game(field, SIZE);
+    game(field, wincom, SIZE);
 
 	return 0;
 }
 
-
-///////управление стрелками 
-//#include <iostream>
-//#include <conio.h>
-//
-//int main(int argc, char* argv[]) {
-//	setlocale(0, "rus");
-//	char symbol = _getch();
-//
-//	while ((symbol = _getch())) {
-//		switch (symbol) {
-//		case 72:
-//			std::cout << "Вверх\n";
-//			break;
-//		case 75:
-//			std::cout << "Вниз\n";
-//			break;
-//		case 77:
-//			std::cout << "Вправо\n";
-//			break;
-//		case 80:
-//			std::cout << "Влево\n";
-//			break;
-//		default:
-//			break;
-//		}
-//	}
-//
-//	return 0;
-//}

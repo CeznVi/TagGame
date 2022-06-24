@@ -34,17 +34,24 @@ void showMessage(std::string message, ConsoleColor color = ConsoleColor::White)
     setColor(ConsoleColor::White, ConsoleColor::Black);
 }
 
+
+
 ////подгонка координат У в зависимости от айди
 int convIdtoY(int id)
 {
+    //0+1
+    //6+1
+    //12+1
+    //18+1
+
     if (id == 0 || id == 1 || id == 2 || id == 3)
-        return 0;
+        return 1;
     if (id == 4 || id == 5 || id == 6 || id == 7)
-        return 6;
+        return 7;
     if (id == 8 || id == 9 || id == 10 || id == 11)
-        return 12;
+        return 13;
     if (id == 12 || id == 13 || id == 14 || id == 15)
-        return 18;
+        return 19;
     else
         return 0;
 }
@@ -52,16 +59,22 @@ int convIdtoY(int id)
 ////подгонка координат Х в зависимости от айди
 int convIdtoX(int id)
 {
+    /// 0 + 30
+    //10 + 30
+    //20 + 30
+    //30 + 30
+
     if (id == 0 || id == 4 || id == 8 || id == 12)
-        return 0;
-    if (id == 1 || id == 5 || id == 9 || id == 13)
-        return 10;
-    if (id == 2 || id == 6 || id == 10 || id == 14)
-        return 20;
-    if (id == 3 || id == 7 || id == 11 || id == 15)
         return 30;
+    else if (id == 1 || id == 5 || id == 9 || id == 13)
+        return 40;
+    else if (id == 2 || id == 6 || id == 10 || id == 14)
+        return 50;
+    else if (id == 3 || id == 7 || id == 11 || id == 15)
+        return 60;
     else
         return 0;
+
 }
 
 //// рисуем цифры на рубашке фишек (1 - 15)
@@ -460,6 +473,7 @@ void draw15(int id)
 //// какую цифру выводить
 void whichNumDraw(const int& id, const int& num)
 {
+
     if (num == 1)
         draw1(id);
     else if (num == 2)
@@ -490,8 +504,7 @@ void whichNumDraw(const int& id, const int& num)
         draw14(id);
     else if (num == 15)
         draw15(id);
-    else
-        return;
+
 }
 
 //// отрисовка рамки
@@ -501,7 +514,8 @@ void drawField(const int& id)
     int x = convIdtoX(id);
     int y = convIdtoY(id);
 
-    setColor(Blue);
+    //setColor(Blue);
+    setColor(White);
 
     for (int i{}; i < 7; ++i)
     {
@@ -522,15 +536,59 @@ void drawField(const int& id)
     setColor(White);
 }
 
-//// отрисовка всего поля
-void drawGameField(const int* field, const int& SIZE)
+////отрисовка счетчика ходов
+void showMovCount(const int& movCount)
 {
+    setPos(75, 7);
+    showMessage("Count move ", Blue);
+        std::cout << movCount << '\n';
+}
+
+////отрисовать кнопки управления
+void showGameKey()
+{
+    setPos(75, 8);
+    showMessage("Game key:\n", Red);
+    setPos(75, 9);
+    showMessage("Use arrow keys to move tiles\n", Blue);
+    setPos(75, 10);
+    showMessage("Use E for exit without saving\n", Blue);
+    setPos(75, 11);
+    showMessage("Use S for exit with saving\n", Blue);
+}
+
+////отрисовать титулку
+void showTitle()
+{
+    setPos(50, 0);
+    showMessage("TAGS", Green);
+}
+
+void showbackground()
+{
+    setPos(0, 0);
+    setColor(Blue);
+    for(int i{}; i < 60; ++i)
+        std::cout << std::string(120, char(178));
+
+    setColor(White);
+}
+
+//// отрисовка всего поля
+void drawGameField(const int* field,const int& SIZE, const int& movCount)
+{
+    
+    showTitle();
+    showMovCount(movCount);
+    showGameKey();
+
     //отрисовка поля
-    for (int i{}; i <= SIZE; ++i)
-        drawField(i);
+    for (int i{}; i < SIZE; ++i)
+            drawField(i);
 
-    for (int i{}; i <= SIZE; ++i)
-        whichNumDraw(i, field[i]);
+    for (int i{}; i < SIZE; ++i)
+          whichNumDraw(i, field[i]);
+           
 
-    setPos(0, 25);
+    setPos(0, 26);
 }
