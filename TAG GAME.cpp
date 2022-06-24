@@ -28,13 +28,13 @@ void setColor(int text, int background = ConsoleColor::Black);
 void setPos(short X, short Y);
 void showMessage(std::string message, ConsoleColor color = ConsoleColor::White);
 void drawField(const int& id);
-void drawGameField(const int* field, const int& SIZE, const int& movCount);
+void drawGameField(const int* field, const int& SIZE, const int& movCount, int* lastTurn);
 void showbackground();
 
 //// Описание и функционал функций в core.cpp
 int* genereteField(const int& SIZE);
 void move(int* field, const int& SIZE, int dir);
-void doStep(int* field,const int& SIZE, int& movCount);
+void doStep(int* field,const int& SIZE, int& movCount, int* lastTurn);
 bool isWin(const int* field, const int* wcom, const int& SIZE);
 
 ////Ф-ция игры (цикл)
@@ -47,13 +47,15 @@ void game(int* field, const int* wcom, const int& SIZE)
     int* lastTurn = new int[SIZE]{};
     
     bool play = false;
+    
     showbackground();
+
+    drawGameField(field, SIZE, movCount, lastTurn);
 
     while (!play)
     {
-        drawGameField(field, SIZE, movCount);
-        doStep(field, SIZE, movCount);
-        drawGameField(field,SIZE, movCount);
+        doStep(field, SIZE, movCount, lastTurn);
+        drawGameField(field,SIZE, movCount, lastTurn);
         play = isWin(field, wcom, SIZE);
     }
  

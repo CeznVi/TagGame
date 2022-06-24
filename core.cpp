@@ -147,7 +147,7 @@ void move(int* field, const int& SIZE, int dir)
 }
 
 ////сделать шаг
-void doStep(int* field, const int& SIZE, int& movCount)
+void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn)
 {
     int dir;
 
@@ -188,6 +188,7 @@ void doStep(int* field, const int& SIZE, int& movCount)
         movCount++;
     }
     
+    copyField(field, lastTurn, SIZE);
 }
 
 ////Проверить выграл игрок или нет

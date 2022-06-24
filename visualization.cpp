@@ -575,20 +575,36 @@ void showbackground()
 }
 
 //// отрисовка всего поля
-void drawGameField(const int* field,const int& SIZE, const int& movCount)
+void drawGameField(const int* field,const int& SIZE, const int& movCount, int* lastTurn)
 {
     
     showTitle();
     showMovCount(movCount);
     showGameKey();
 
-    //отрисовка поля
-    for (int i{}; i < SIZE; ++i)
-            drawField(i);
+    ////отрисовка поля
+    //for (int i{}; i < SIZE; ++i)
+    //        drawField(i);
+    ////отрисовка цифр
+    //for (int i{}; i < SIZE; ++i)
+    //        whichNumDraw(i, field[i]);
 
     for (int i{}; i < SIZE; ++i)
-          whichNumDraw(i, field[i]);
-           
+    {
+        if (movCount == 0)
+        {
+            drawField(i);
+            whichNumDraw(i, field[i]);
+        }
+        else if ((movCount > 0) || (lastTurn[i] != field[i]))
+        {
+            drawField(i);
+            whichNumDraw(i, field[i]);
+        }
+        else
+            drawField(i);
+    }
+
 
     setPos(0, 26);
 }
