@@ -1,13 +1,13 @@
 //// Игровой движок
 #include <iostream>
 #include <conio.h>
- 
+
 //Cписок движения
 enum Move {
-    Up = 1,
-    Down = 2,
-    Left = 3,
-    Rigth = 4,
+    Up = 72,
+    Down = 80,
+    Left = 75,
+    Rigth = 77,
 };
 
 ////Генерирует случайные значения в заданом дипазоне
@@ -142,54 +142,32 @@ void move(int* field, const int& SIZE, int dir)
 ////сделать шаг
 void doStep(int* field, const int& SIZE)
 {
-    //int dir;
-    std::cout << "Enter direction "; 
+    int dir;
+    std::cout << "Choise direction "; 
     std::cout << char(27) << ' ' << char(26) << ' ' << char(25) << ' ' << char(24) << '\n';
+    
     //std::cin >> dir;
+    dir = _getch();
+
     int id0 = whereIs0(field, SIZE);
+ 
+    //Проверка и защита от лома масива  
+    if (dir == Move::Down && id0 < 4)
+        return;
+    else if (dir == Move::Up && id0 > 11)
+        return;
+    else if (dir == Move::Left && (id0 == 3 || id0 == 7 || id0 == 11 || id0 == 15))
+        return;
+    else if (dir == Move::Rigth && (id0 == 0 || id0 == 4 || id0 == 8 || id0 == 12))
+        return;
 
-
-    ///ТЕСТЫ
-    char symbol = _getch();
-    while (symbol = _getch()) 
-    {
-        switch (symbol) {
-        case 72:
-            move(field, SIZE, Move::Up);
-            break;
-        case 80:
-            //if (dir == Move::Down && id0 < 4)
-            //    return;
-            move(field, SIZE, Move::Down);
-            break;
-        case 77:
-            //std::cout << "Вправо\n";
-            break;
-        case 75:
-            //std::cout << "Влево\n";
-            break;
-        default:
-            break;
-        }
-    }
-
-
-    ////Проверка и защита от лома масива  
-    //if (dir == Move::Down && id0 < 4)
-    //    return;
-    //else if (dir == Move::Up && id0 > 11)
-    //    return;
-    //else if (dir == Move::Left && (id0 == 3 || id0 == 7 || id0 == 11 || id0 == 15))
-    //    return;
-    //else if (dir == Move::Rigth && (id0 == 0 || id0 == 4 || id0 == 8 || id0 == 12))
-    //    return;
-
-    //if (dir == Move::Up)
-    //    move(field, SIZE, Move::Up);
-    //else if (dir == Move::Down)
-    //    move(field, SIZE, Move::Down);
-    //else if (dir == Move::Left)
-    //    move(field, SIZE, Move::Left);
-    //if (dir == Move::Rigth)
-    //    move(field, SIZE, Move::Rigth);
+    //сделать ход
+    if (dir == Move::Up)
+        move(field, SIZE, Move::Up);
+    else if (dir == Move::Down)
+        move(field, SIZE, Move::Down);
+    else if (dir == Move::Left)
+        move(field, SIZE, Move::Left);
+    else if (dir == Move::Rigth)
+        move(field, SIZE, Move::Rigth);
 }

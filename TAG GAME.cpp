@@ -68,8 +68,7 @@ void game(int* field, const int& SIZE)
         drawGameField(field, SIZE);
         
         doStep(field, SIZE);
-        system("cls");
-        
+        //system("cls");
         drawGameField(field, SIZE);
     }
 
