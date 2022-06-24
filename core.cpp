@@ -2,6 +2,14 @@
 #include <iostream>
 #include <conio.h>
 
+
+//// Вызов функций из визуализации.срр
+void drawGameField(const int* field, const int& SIZE, const int& movCount, int* lastTurn);
+void showbackground();
+void drawGameOver();
+void drawHiscreen();
+void setPos(short X, short Y);
+
 //Cписок движения
 enum Move {
     Up = 72,
@@ -206,3 +214,28 @@ bool isWin(const int* field, const int* wcom,const int& SIZE)
         return false;
 }
 
+////Ф-ция игры (цикл)
+void game(int* field, const int* wcom, const int& SIZE)
+{
+    ////счетчик ходов
+    int movCount{};
+
+    ////хранение игрового поля до хода (для выполнения локальной отрисовки игр. поля) 
+    int* lastTurn = new int[SIZE] {};
+
+    bool play = false;
+    drawHiscreen();
+
+
+    drawGameField(field, SIZE, movCount, lastTurn);
+
+    while (!play)
+    {
+        doStep(field, SIZE, movCount, lastTurn);
+        drawGameField(field, SIZE, movCount, lastTurn);
+        play = isWin(field, wcom, SIZE);
+    }
+
+    drawGameOver();
+
+}

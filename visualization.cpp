@@ -582,13 +582,6 @@ void drawGameField(const int* field,const int& SIZE, const int& movCount, int* l
     showMovCount(movCount);
     showGameKey();
 
-    ////отрисовка поля
-    //for (int i{}; i < SIZE; ++i)
-    //        drawField(i);
-    ////отрисовка цифр
-    //for (int i{}; i < SIZE; ++i)
-    //        whichNumDraw(i, field[i]);
-
     for (int i{}; i < SIZE; ++i)
     {
         if (movCount == 0)
@@ -607,4 +600,184 @@ void drawGameField(const int* field,const int& SIZE, const int& movCount, int* l
 
 
     setPos(0, 26);
+}
+
+///отрисовка границы (для начала игры и конца)
+void drawRectangle(int& x, int& y)
+{
+    for (int i{}; i < 13; ++i)
+    {
+        for (int j{}; j < 41; ++j)
+        {
+            setPos(x + j, y + i);
+            setColor(Brown);
+            if (i == 0 || i == 12)
+                std::cout << char(178);
+            else if (i >= 0 && j == 0)
+                std::cout << char(178);
+            else if (i >= 0 && j == 40)
+                std::cout << char(178);
+            else
+            {
+                setColor(Green);
+                std::cout << char(178);
+            }
+                
+            
+        }
+        std::cout << '\n';
+    }
+    setColor(White);
+}
+
+////нарисовать заставку конец игры
+void drawGameOver()
+{
+    int x = convIdtoX(4);
+    int y = convIdtoY(4);
+    drawRectangle(x, y);
+    setColor(Red);
+
+    for (int i{}; i < 13; ++i)
+    {
+        for (int j{}; j < 41; ++j)
+        {
+            setPos(x + j, y + i);
+            //G
+            if((i == 1 || i==5) && (j>8 && j < 14))
+                std::cout << char(178);
+            else if(j==9 && (i>1 && i<6))
+                std::cout << char(178);
+            else if (i == 3 && (j > 11 && j < 14))
+                std::cout << char(178);
+            else if (i == 4 && j==13)
+                std::cout << char(178);
+            //A
+            else if (i == 1 && j == 17)
+                std::cout << char(178);
+            else if (i == 2 && (j == 16 || j == 18))
+                std::cout << char(178);
+            else if ((i > 2 && i < 6) && (j == 15 || j == 19))
+                std::cout << char(178);
+            else if (i == 4 && (j > 15 && j < 19))
+                std::cout << char(178);
+            //M
+            else if ((i > 0 && i < 6) && (j == 21 || j == 25))
+                std::cout << char(178);
+            else if (i ==2 && (j == 22 || j == 24))
+                std::cout << char(178);
+            else if (i == 3 && j == 23)
+                std::cout << char(178);
+            //E
+            else if ((i > 0 && i < 6) && j == 27)
+                std::cout << char(178);
+            else if (( i == 1 || i == 3 || i ==5) && (j>27 && j<31))
+                std::cout << char(178);
+            //O
+            else if ((i == 7 || i == 11) && (j > 8 && j < 13))
+                std::cout << char(178);
+            else if ((i > 6 && i < 12) && (j==9 || j == 12 ))
+                std::cout << char(178);
+            //V
+            else if((i>6 && i <10) && (j ==14 || j==18))
+                std::cout << char(178);
+            else if(i==10 && (j==15 || j==17))
+                std::cout << char(178);
+            else if(i==11 && j == 16)
+                std::cout << char(178);
+            //E
+            else if ((i > 6 && i < 12) && j == 20)
+                std::cout << char(178);
+            else if ((i == 7 || i == 9 || i == 11) && (j > 19 && j < 24))
+                std::cout << char(178);
+            //R
+            else if ((i > 6 && i < 12) && (j == 26))
+                std::cout << char(178);
+            else if ((i==7 || i==9) && (j>26 && j<30))
+                std::cout << char(178);
+            else if ((j==29) && (i == 8 || i == 11))
+                std::cout << char(178);
+            else if ((i == 10) && j == 28)
+                std::cout << char(178);
+        }
+        std::cout << '\n';
+    }
+
+
+
+    setColor(White);
+    setPos(0, 26);
+}
+
+void drawWelcome()
+{
+    int x = convIdtoX(4);
+    int y = convIdtoY(4);
+    drawRectangle(x, y);
+    setColor(Red);
+
+    for (int i{}; i < 13; ++i)
+    {
+        for (int j{}; j < 41; ++j)
+        {
+            setPos(x + j, y + i);
+            //G
+            if ((i == 1 || i == 5) && (j > 8 && j < 14))
+                std::cout << char(178);
+            else if (j == 9 && (i > 1 && i < 6))
+                std::cout << char(178);
+            else if (i == 3 && (j > 11 && j < 14))
+                std::cout << char(178);
+            else if (i == 4 && j == 13)
+                std::cout << char(178);
+            //A
+            else if (i == 1 && j == 17)
+                std::cout << char(178);
+            else if (i == 2 && (j == 16 || j == 18))
+                std::cout << char(178);
+            else if ((i > 2 && i < 6) && (j == 15 || j == 19))
+                std::cout << char(178);
+            else if (i == 4 && (j > 15 && j < 19))
+                std::cout << char(178);
+            //M
+            else if ((i > 0 && i < 6) && (j == 21 || j == 25))
+                std::cout << char(178);
+            else if (i == 2 && (j == 22 || j == 24))
+                std::cout << char(178);
+            else if (i == 3 && j == 23)
+                std::cout << char(178);
+            //E
+            else if ((i > 0 && i < 6) && j == 27)
+                std::cout << char(178);
+            else if ((i == 1 || i == 3 || i == 5) && (j > 27 && j < 31))
+                std::cout << char(178);
+            //15
+            if ((i > 6 && i < 12) && (j == 18))
+                std::cout << char(178);
+            else if (i == 8 && j == 17)
+                std::cout << char(178);
+            else if (i == 9 && j == 16)
+                std::cout << char(178);
+            else if ((i > 6 && i < 10) && j == 20)
+                std::cout << char(178);
+            else if ((i == 7 || i == 9 || i == 11) && (j > 19 && j < 23))
+                std::cout << char(178);
+            else if (i == 10 && j == 22)
+                std::cout << char(178);
+
+        }
+        std::cout << '\n';
+    }
+
+     setColor(White);
+    setPos(0, 26);
+}
+
+void drawHiscreen()
+{
+    showbackground();
+    drawWelcome();
+    setPos(29, 6);
+    system("pause");
+    showbackground();
 }
