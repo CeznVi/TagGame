@@ -1,6 +1,7 @@
 //// Игровой движок
 #include <iostream>
 #include <conio.h>
+#include <fstream>
 
 
 //// Вызов функций из визуализации.срр
@@ -16,6 +17,7 @@ enum Move {
     Down = 80,
     Left = 75,
     Rigth = 77,
+    Space = 32,
 };
 
 ////Генерирует случайные значения в заданом дипазоне
@@ -80,12 +82,35 @@ void showpole(const int* field, const int& SIZE)
     std::cout << '\n';
 }
 
+////функция загрузки сохранения
+void loadSave()
+{
+
+}
+
+////функция сделать сохранения игрового процесса
+void saveGame(const int* field, const int& SIZE)
+{
+    std::ofstream fout;
+
+    fout.open("saved_game.txt");
+    if (!fout)
+    {
+        std::cerr << "Error open file...";
+        exit(1);
+    }
+
+    for (int i{}; i < SIZE; ++i)
+        fout << field[i] << ' ';
+
+    fout.close();
+}
+
 //// Создать копию поля
 void copyField(const int* field, int* copyField, const int& SIZE)
 {
     for (int i{}; i < SIZE; ++i)
         copyField[i] = field[i];
-
 }
 
 ////функция перемещения фишек
@@ -97,9 +122,9 @@ void move(int* field, const int& SIZE, int dir)
 
     copyField(field, tempArr, SIZE);
 
-    delete[] field;
-
-    field = new int[SIZE];
+    ////причина багов*
+    //delete[] field;
+    //field = new int[SIZE];
 
     if (dir == Move::Down)
     {
@@ -155,7 +180,7 @@ void move(int* field, const int& SIZE, int dir)
 }
 
 ////сделать шаг
-void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn)
+void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& play)
 {
     int dir;
 
@@ -195,7 +220,13 @@ void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn)
         move(field, SIZE, Move::Rigth);
         movCount++;
     }
-    
+    else if (dir == Move::Space)
+    {
+        saveGame(field, SIZE);
+        play = true;
+    }
+
+
     copyField(field, lastTurn, SIZE);
 }
 
@@ -215,8 +246,19 @@ bool isWin(const int* field, const int* wcom,const int& SIZE)
 }
 
 ////Ф-ция игры (цикл)
-void game(int* field, const int* wcom, const int& SIZE)
+void game()
 {
+    const int SIZE = 16;
+
+    //// генерация рандомного поля
+    //int* field = genereteField(SIZE);
+    
+    //////тест
+    int* field = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
+
+    //// победная комбинация
+    const int* wcom = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
+
     ////счетчик ходов
     int movCount{};
 
@@ -224,18 +266,63 @@ void game(int* field, const int* wcom, const int& SIZE)
     int* lastTurn = new int[SIZE] {};
 
     bool play = false;
-    drawHiscreen();
-
+    showbackground();
 
     drawGameField(field, SIZE, movCount, lastTurn);
 
     while (!play)
     {
-        doStep(field, SIZE, movCount, lastTurn);
+        doStep(field, SIZE, movCount, lastTurn, play);
         drawGameField(field, SIZE, movCount, lastTurn);
         play = isWin(field, wcom, SIZE);
     }
 
     drawGameOver();
+    setPos(29, 29);
+    system("pause");
+    }
 
+////Функция записи в таблицу лидеров
+
+////Функция показа таблицы лидеров
+void showlederboard()
+{
+
+}
+
+//навигация в майн меню
+void menuNav(bool& isgamerun)
+{
+    int idStep;
+    idStep = _getch();
+    
+    //std::cout << idStep << '\n';
+    ///L load - 108 || 76
+    ///t leaderboard 116 || 84
+    ///e exit (altf4) 101 || 69
+    /// s save 115 || 83
+
+    if (idStep == 27)
+        isgamerun = false;
+    else if (idStep == Move::Space)
+        loadSave();
+    else if (idStep == 116 || idStep == 84)
+        showlederboard();
+    else
+        game();
+
+
+
+}
+
+//функция игры
+void tagGame()
+{
+    bool isgamerun = true;
+
+    while (isgamerun)
+    {
+        drawHiscreen();
+        menuNav(isgamerun);
+    } 
 }

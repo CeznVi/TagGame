@@ -34,8 +34,6 @@ void showMessage(std::string message, ConsoleColor color = ConsoleColor::White)
     setColor(ConsoleColor::White, ConsoleColor::Black);
 }
 
-
-
 ////подгонка координат У в зависимости от айди
 int convIdtoY(int id)
 {
@@ -554,7 +552,7 @@ void showGameKey()
     setPos(75, 10);
     showMessage("Use E for exit without saving\n", Blue);
     setPos(75, 11);
-    showMessage("Use S for exit with saving\n", Blue);
+    showMessage("Use SPACE for exit with saving\n", Blue);
 }
 
 ////отрисовать титулку
@@ -703,6 +701,15 @@ void drawGameOver()
         std::cout << '\n';
     }
 
+    setColor(Blue);
+    setPos(75, 8);
+    std::cout << std::string(22, char(178));
+    setPos(75, 9);
+    std::cout << std::string(29, char(178));
+    setPos(75, 10);
+    std::cout << std::string(29, char(178));
+    setPos(75, 11);
+    std::cout << std::string(29, char(178));
 
 
     setColor(White);
@@ -777,7 +784,20 @@ void drawHiscreen()
 {
     showbackground();
     drawWelcome();
-    setPos(29, 6);
-    system("pause");
-    showbackground();
+
+    setPos(75, 8);
+    showMessage("Game key:\n", Red);
+    setPos(75, 9);
+    showMessage("Use any key for start new game\n", Brown);
+    setPos(75, 10);
+    showMessage("Use SPACE for load last saving game\n", Brown);
+    setPos(75, 11);
+    showMessage("Use T for view leaderbords\n", Brown);
+    setPos(75, 12);
+    showMessage("Use ESC for exit\n", Brown);
+
+    setPos(31, 35);
+    showMessage("Game autor: Velychko Viktor from SBU111", Yellow);
+
+
 }
