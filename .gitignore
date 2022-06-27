@@ -2,6 +2,10 @@
 x64/
 debug
 
+# Игнор тхт и таблиц либры
+#*.ods
+#*.txt
+
 ### C++ ###
 # Prerequisites
 *.d
