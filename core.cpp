@@ -10,6 +10,7 @@ void showbackground();
 void drawGameOver();
 void drawHiscreen();
 void setPos(short X, short Y);
+void drawSaveMessage();
 
 //Cписок движения
 enum Move {
@@ -18,6 +19,7 @@ enum Move {
     Left = 75,
     Rigth = 77,
     Space = 32,
+    Esc = 27,
 };
 
 ////Генерирует случайные значения в заданом дипазоне
@@ -85,11 +87,29 @@ void showpole(const int* field, const int& SIZE)
 ////функция загрузки сохранения
 void loadSave()
 {
+    //const int SIZE = 16;
+    //int* field = new int[SIZE];
 
+    //std::ifstream fin;
+    //fin.open("saved_game.txt");
+    //
+    //if (!fin)
+    //{
+    //    std::cerr << "Error open file...";
+    //    exit(1);
+    //}
+
+    //while (fin)
+    //{
+    //    for(int i{}; i < SIZE; ++i)
+    //        field[i] = 
+    //}
+    //fin.close();
+    //system("pause");
 }
 
 ////функция сделать сохранения игрового процесса
-void saveGame(const int* field, const int& SIZE)
+void saveGame(const int* field, const int& SIZE, int& movCount)
 {
     std::ofstream fout;
 
@@ -102,6 +122,9 @@ void saveGame(const int* field, const int& SIZE)
 
     for (int i{}; i < SIZE; ++i)
         fout << field[i] << ' ';
+
+    fout << '\n' << movCount;
+
 
     fout.close();
 }
@@ -180,7 +203,7 @@ void move(int* field, const int& SIZE, int dir)
 }
 
 ////сделать шаг
-void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& play)
+void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& exitGame)
 {
     int dir;
 
@@ -222,9 +245,13 @@ void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& pla
     }
     else if (dir == Move::Space)
     {
-        saveGame(field, SIZE);
-        play = true;
+        saveGame(field, SIZE, movCount);
+        drawSaveMessage();
+        
     }
+
+    else if (dir == Move::Esc)
+        exitGame = true;
 
 
     copyField(field, lastTurn, SIZE);
@@ -266,18 +293,21 @@ void game()
     int* lastTurn = new int[SIZE] {};
 
     bool play = false;
+    bool exitGame = false;
+
     showbackground();
 
     drawGameField(field, SIZE, movCount, lastTurn);
 
-    while (!play)
+    while ((!play) && (!exitGame))
     {
-        doStep(field, SIZE, movCount, lastTurn, play);
+        doStep(field, SIZE, movCount, lastTurn, exitGame);
         drawGameField(field, SIZE, movCount, lastTurn);
         play = isWin(field, wcom, SIZE);
     }
 
     drawGameOver();
+
     setPos(29, 29);
     system("pause");
     }
@@ -296,13 +326,7 @@ void menuNav(bool& isgamerun)
     int idStep;
     idStep = _getch();
     
-    //std::cout << idStep << '\n';
-    ///L load - 108 || 76
-    ///t leaderboard 116 || 84
-    ///e exit (altf4) 101 || 69
-    /// s save 115 || 83
-
-    if (idStep == 27)
+    if (idStep == Move::Esc)
         isgamerun = false;
     else if (idStep == Move::Space)
         loadSave();
@@ -310,8 +334,6 @@ void menuNav(bool& isgamerun)
         showlederboard();
     else
         game();
-
-
 
 }
 

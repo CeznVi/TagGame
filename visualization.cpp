@@ -550,16 +550,16 @@ void showGameKey()
     setPos(75, 9);
     showMessage("Use arrow keys to move tiles\n", Blue);
     setPos(75, 10);
-    showMessage("Use E for exit without saving\n", Blue);
+    showMessage("Use ESC for exit without saving\n", Blue);
     setPos(75, 11);
-    showMessage("Use SPACE for exit with saving\n", Blue);
+    showMessage("Use SPACE for save\n", Blue);
 }
 
 ////отрисовать титулку
 void showTitle()
 {
-    setPos(50, 0);
-    showMessage("TAGS", Green);
+    setPos(46, 0);
+    showMessage("15 GAME", Brown);
 }
 
 void showbackground()
@@ -703,13 +703,13 @@ void drawGameOver()
 
     setColor(Blue);
     setPos(75, 8);
-    std::cout << std::string(22, char(178));
+    std::cout << std::string(30, char(178));
     setPos(75, 9);
-    std::cout << std::string(29, char(178));
+    std::cout << std::string(30, char(178));
     setPos(75, 10);
-    std::cout << std::string(29, char(178));
+    std::cout << std::string(31, char(178));
     setPos(75, 11);
-    std::cout << std::string(29, char(178));
+    std::cout << std::string(31, char(178));
 
 
     setColor(White);
@@ -800,4 +800,84 @@ void drawHiscreen()
     showMessage("Game autor: Velychko Viktor from SBU111", Yellow);
 
 
+}
+
+void drawSaveMessage()
+{ 
+    int x = convIdtoX(4);
+    int y = convIdtoY(4);
+    drawRectangle(x, y);
+    setColor(Red);
+
+    for (int i{}; i < 13; ++i)
+    {
+        for (int j{}; j < 41; ++j)
+        {
+            setPos(x + j, y + i);
+            //G
+            if ((i == 1 || i == 5) && (j > 8 && j < 14))
+                std::cout << char(178);
+            else if (j == 9 && (i > 1 && i < 6))
+                std::cout << char(178);
+            else if (i == 3 && (j > 11 && j < 14))
+                std::cout << char(178);
+            else if (i == 4 && j == 13)
+                std::cout << char(178);
+            //A
+            else if (i == 1 && j == 17)
+                std::cout << char(178);
+            else if (i == 2 && (j == 16 || j == 18))
+                std::cout << char(178);
+            else if ((i > 2 && i < 6) && (j == 15 || j == 19))
+                std::cout << char(178);
+            else if (i == 4 && (j > 15 && j < 19))
+                std::cout << char(178);
+            //M
+            else if ((i > 0 && i < 6) && (j == 21 || j == 25))
+                std::cout << char(178);
+            else if (i == 2 && (j == 22 || j == 24))
+                std::cout << char(178);
+            else if (i == 3 && j == 23)
+                std::cout << char(178);
+            //E
+            else if ((i > 0 && i < 6) && j == 27)
+                std::cout << char(178);
+            else if ((i == 1 || i == 3 || i == 5) && (j > 27 && j < 31))
+                std::cout << char(178);
+            //S
+            else if ((i == 7 || i == 11 || i == 9) && (j > 8 && j < 13))
+                std::cout << char(178);
+            else if ((i > 6 && i < 10) && (j == 9))
+                std::cout << char(178);
+            else if ((i > 8 && i < 12) && (j == 12))
+                std::cout << char(178);
+            //A
+            else if (i == 7 && j == 16)
+                std::cout << char(178);
+            else if (i == 8 && (j == 15 || j == 17))
+                std::cout << char(178);
+            else if ((i > 8 && i < 12) && (j == 14 || j == 18))
+                std::cout << char(178);
+            else if (i == 10 && (j > 14 && j < 18))
+                std::cout << char(178);        
+            //V
+            else if ((i > 6 && i < 10) && (j == 20 || j == 24))
+                std::cout << char(178);
+            else if (i == 10 && (j == 21 || j == 23))
+                std::cout << char(178);
+            else if (i == 11 && j == 22)
+                std::cout << char(178);
+            //E
+            else if ((i > 6 && i < 12) && j == 26)
+                std::cout << char(178);
+            else if ((i == 7 || i == 9 || i == 11) && (j > 26 && j < 30))
+                std::cout << char(178);
+
+        }
+        std::cout << '\n';
+    }
+
+    Sleep(500);
+    setColor(White);
+    setPos(0, 26);
 }
