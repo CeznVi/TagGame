@@ -86,49 +86,48 @@ void showpole(const int* field, const int& SIZE)
 }
 
 ////функция загрузки сохранения
-void loadSave()
+void loadSave(int* field, const int& SIZE, int& movCount, int& min, int& sec)
 {
-    //const int SIZE = 16;
-    //int* field = new int[SIZE];
-
-    //std::ifstream fin;
-    //fin.open("saved_game.txt");
-    //
-    //if (!fin)
-    //{
-    //    std::cerr << "Error open file...";
-    //    exit(1);
-    //}
-
-    //while (fin)
-    //{
-    //    for(int i{}; i < SIZE; ++i)
-    //        field[i] = 
-    //}
-    //fin.close();
-    //system("pause");
-}
-
-////функция сделать сохранения игрового процесса
-void saveGame(const int* field, const int& SIZE, int& movCount, int& min, int& sec)
-{
-    std::ofstream fout;
-
-    fout.open("saved_game.txt");
-    if (!fout)
+    FILE* file;
+    fopen_s(&file, "saved_game.txt", "r");
+    if (!file)
     {
         std::cerr << "Error open file...";
         exit(1);
     }
 
-    for (int i{}; i < SIZE; ++i)
-        fout << field[i] << ' ';
+    fread(field, sizeof(int), SIZE, file);
+    fread(&movCount, sizeof(int), 1, file);
+    fread(&min, sizeof(int), 1, file);
+    fread(&sec, sizeof(int), 1, file);
 
-    fout << '\n' << movCount;
-    fout << '\n' << min;
-    fout << '\n' << sec;
 
-    fout.close();
+
+    fclose(file);
+}
+
+////функция сделать сохранения игрового процесса
+void saveGame(const int* field, const int& SIZE, int& movCount, int& min, int& sec)
+{
+    FILE* file;
+    fopen_s(&file, "saved_game.txt", "w");
+    if (!file) 
+    {
+            std::cerr << "Error open file...";
+            exit(1);
+    }
+
+    fwrite(field, sizeof(int), SIZE, file);
+    fwrite(&movCount, sizeof(int), 1, file);
+    fwrite(&min, sizeof(int), 1, file);
+    fwrite(&sec, sizeof(int), 1, file);
+
+    if (fwrite != 0)
+        drawSaveMessage();
+    else
+        std::cout << "Error";
+
+    fclose(file);
 }
 
 //// Создать копию поля
@@ -246,12 +245,7 @@ void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& exi
         movCount++;
     }
     else if (dir == Move::Space)
-    {
         saveGame(field, SIZE, movCount, min, sec);
-        drawSaveMessage();
-        
-    }
-
     else if (dir == Move::Esc)
         exitGame = true;
 
@@ -289,17 +283,17 @@ void gameTimer(int& min, int& sec, bool play, bool exitGame, time_t& zerotime)
 }
 
 ////Ф-ция игры (цикл)
-void game()
+void game(bool& load)
 {
     const int SIZE = 16;
     ////переменные таймера
     int min{}, sec{};
     time_t zerotime = time(0);
     //// генерация рандомного поля
-    //int* field = genereteField(SIZE);
+    int* field = genereteField(SIZE);
     
-    //////тест
-    int* field = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
+    ///// Для дебага
+    ////int* field = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
 
     //// победная комбинация
     const int* wcom = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
@@ -313,6 +307,10 @@ void game()
     bool play = false;
     bool exitGame = false;
 
+    if (load == true)
+    {
+        loadSave(field, SIZE, movCount, min, sec);
+    }
     showbackground();
     
     drawGameField(field, SIZE, movCount, lastTurn, min, sec);
@@ -343,16 +341,20 @@ void showlederboard()
 void menuNav(bool& isgamerun)
 {
     int idStep;
+    bool load = false;
     idStep = _getch();
     
     if (idStep == Move::Esc)
         isgamerun = false;
     else if (idStep == Move::Space)
-        loadSave();
+    {
+        load = true;
+        game(load);
+    }   
     else if (idStep == 116 || idStep == 84)
         showlederboard();
     else
-        game();
+        game(load);
 
 }
 
