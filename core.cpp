@@ -273,12 +273,13 @@ void gameTimer(int& min, int& sec, bool play, bool exitGame, time_t& zerotime)
 {
     if(((!play) && (!exitGame)))
         sec = time(0) - zerotime;
-   
+
     if (sec == 60)
     {
         min += 1;
         zerotime += 60;
     }
+
    
 }
 
@@ -310,6 +311,7 @@ void game(bool& load)
     if (load == true)
     {
         loadSave(field, SIZE, movCount, min, sec);
+        zerotime -= sec;
     }
     showbackground();
     
