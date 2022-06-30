@@ -562,6 +562,17 @@ void showTitle()
     showMessage("15 GAME", Brown);
 }
 
+////отрисовка таймера
+void showTimer(int min, int sec)
+{
+    setPos(75, 6);
+    showMessage("Timer: ", Blue);
+    std::cout << min;
+    showMessage(" min ", Blue);
+    std::cout << sec;
+    showMessage(" sec", Blue);
+}
+
 void showbackground()
 {
     setPos(0, 0);
@@ -573,11 +584,11 @@ void showbackground()
 }
 
 //// отрисовка всего поля
-void drawGameField(const int* field,const int& SIZE, const int& movCount, int* lastTurn)
+void drawGameField(const int* field,const int& SIZE, const int& movCount, int* lastTurn, int& min, int& sec)
 {
-    
     showTitle();
     showMovCount(movCount);
+    showTimer(min, sec);
     showGameKey();
 
     for (int i{}; i < SIZE; ++i)
@@ -881,3 +892,4 @@ void drawSaveMessage()
     setColor(White);
     setPos(0, 26);
 }
+

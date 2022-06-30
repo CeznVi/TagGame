@@ -2,10 +2,11 @@
 #include <iostream>
 #include <conio.h>
 #include <fstream>
+#include <time.h>
 
 
 //// Вызов функций из визуализации.срр
-void drawGameField(const int* field, const int& SIZE, const int& movCount, int* lastTurn);
+void drawGameField(const int* field, const int& SIZE, const int& movCount, int* lastTurn, int& min, int& sec);
 void showbackground();
 void drawGameOver();
 void drawHiscreen();
@@ -109,7 +110,7 @@ void loadSave()
 }
 
 ////функция сделать сохранения игрового процесса
-void saveGame(const int* field, const int& SIZE, int& movCount)
+void saveGame(const int* field, const int& SIZE, int& movCount, int& min, int& sec)
 {
     std::ofstream fout;
 
@@ -124,7 +125,8 @@ void saveGame(const int* field, const int& SIZE, int& movCount)
         fout << field[i] << ' ';
 
     fout << '\n' << movCount;
-
+    fout << '\n' << min;
+    fout << '\n' << sec;
 
     fout.close();
 }
@@ -203,7 +205,7 @@ void move(int* field, const int& SIZE, int dir)
 }
 
 ////сделать шаг
-void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& exitGame)
+void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& exitGame, int& min, int& sec)
 {
     int dir;
 
@@ -245,7 +247,7 @@ void doStep(int* field, const int& SIZE, int& movCount, int* lastTurn, bool& exi
     }
     else if (dir == Move::Space)
     {
-        saveGame(field, SIZE, movCount);
+        saveGame(field, SIZE, movCount, min, sec);
         drawSaveMessage();
         
     }
@@ -272,11 +274,27 @@ bool isWin(const int* field, const int* wcom,const int& SIZE)
         return false;
 }
 
+////Timer
+void gameTimer(int& min, int& sec, bool play, bool exitGame, time_t& zerotime)
+{
+    if(((!play) && (!exitGame)))
+        sec = time(0) - zerotime;
+   
+    if (sec == 60)
+    {
+        min += 1;
+        zerotime += 60;
+    }
+   
+}
+
 ////Ф-ция игры (цикл)
 void game()
 {
     const int SIZE = 16;
-
+    ////переменные таймера
+    int min{}, sec{};
+    time_t zerotime = time(0);
     //// генерация рандомного поля
     //int* field = genereteField(SIZE);
     
@@ -296,13 +314,14 @@ void game()
     bool exitGame = false;
 
     showbackground();
-
-    drawGameField(field, SIZE, movCount, lastTurn);
+    
+    drawGameField(field, SIZE, movCount, lastTurn, min, sec);
 
     while ((!play) && (!exitGame))
     {
-        doStep(field, SIZE, movCount, lastTurn, exitGame);
-        drawGameField(field, SIZE, movCount, lastTurn);
+        gameTimer(min, sec, play, exitGame, zerotime);
+        doStep(field, SIZE, movCount, lastTurn, exitGame, min, sec);
+        drawGameField(field, SIZE, movCount, lastTurn, min, sec);
         play = isWin(field, wcom, SIZE);
     }
 
@@ -336,6 +355,8 @@ void menuNav(bool& isgamerun)
         game();
 
 }
+
+////таймер раунда
 
 //функция игры
 void tagGame()
