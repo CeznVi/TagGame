@@ -803,7 +803,7 @@ void drawHiscreen()
     setPos(75, 10);
     showMessage("Use SPACE for load last saving game\n", Brown);
     setPos(75, 11);
-    showMessage("Use T for view leaderbords\n", Brown);
+    showMessage("Use TAB for view leaderbords\n", Brown);
     setPos(75, 12);
     showMessage("Use ESC for exit\n", Brown);
 
@@ -893,3 +893,18 @@ void drawSaveMessage()
     setPos(0, 26);
 }
 
+void drawleadtable()
+{
+    setPos(0, 0);
+    showbackground();
+    int x = convIdtoX(1);
+    int y = convIdtoY(1);
+    drawRectangle(x, y);
+    setColor(White);
+    setPos(53, 2);
+    showMessage("Hight score table\n", Brown);
+    setPos(41, 3);
+    showMessage("\Minutes\tSecund\tMove count\n", Brown);
+
+    
+}

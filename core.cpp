@@ -12,6 +12,18 @@ void drawGameOver();
 void drawHiscreen();
 void setPos(short X, short Y);
 void drawSaveMessage();
+void drawleadtable();
+
+//обьявление таблици лидеров
+struct Top5
+{
+    int mov = 1000;
+    int min = 600;
+    int sec = 59;
+};
+
+const int leadSIZE = 5;
+Top5 Lead[leadSIZE];
 
 //Cписок движения
 enum Move {
@@ -21,6 +33,7 @@ enum Move {
     Rigth = 77,
     Space = 32,
     Esc = 27,
+    Tab = 9,
 };
 
 ////Генерирует случайные значения в заданом дипазоне
@@ -283,6 +296,69 @@ void gameTimer(int& min, int& sec, bool play, bool exitGame, time_t& zerotime)
    
 }
 
+////функция загрузки TOP5
+void loadTop5(Top5* Lead, const int& leadSIZE)
+{
+    FILE* file;
+    fopen_s(&file, "top5.txt", "r");
+    if (!file)
+    {
+        std::cerr << "Error open file...";
+        exit(1);
+    }
+
+    fread(Lead, sizeof(Top5), leadSIZE, file);
+    fclose(file);
+}
+
+//// Сохранить ТОП5 в файл
+void saveTop5(Top5* Lead, const int& leadSIZE)
+{
+    FILE* file;
+    fopen_s(&file, "top5.txt", "w");
+    if (!file)
+    {
+        std::cerr << "Error open file...";
+        exit(1);
+    }
+
+    fwrite(Lead, sizeof(Top5), leadSIZE, file);
+    fclose(file);
+}
+
+////Функция записи в таблицу лидеров
+void writeLeadtable(int& min, int& sec, int& movCount, Top5* Lead, const int& leadSIZE)
+{
+    saveTop5(Lead, leadSIZE);
+    loadTop5(Lead, leadSIZE);
+
+    for (int i{}; i < leadSIZE; ++i)
+    {
+        if (((Lead[i].min > min) && (Lead[i].sec > sec)) && (Lead[i].mov > movCount))
+        {
+            Lead[i].min = min;
+            Lead[i].sec = sec;
+            Lead[i].mov = movCount;
+            saveTop5(Lead, leadSIZE);
+            break;
+        }
+    }
+}
+
+////Функция показа таблицы лидеров
+void showlederboard()
+{
+    loadTop5(Lead, leadSIZE);
+    drawleadtable();
+    for (int i{}; i < leadSIZE; ++i)
+    {
+        setPos(44, 4 + i);
+        std::cout << Lead[i].min << "\t\t" << Lead[i].sec << "\t" << Lead[i].mov;
+    }
+    setPos(40, 0);
+    system("pause");
+}
+
 ////Ф-ция игры (цикл)
 void game(bool& load)
 {
@@ -294,7 +370,7 @@ void game(bool& load)
     int* field = genereteField(SIZE);
     
     ///// Для дебага
-    ////int* field = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
+    //int* field = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
 
     //// победная комбинация
     const int* wcom = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
@@ -326,18 +402,13 @@ void game(bool& load)
     }
 
     drawGameOver();
-
     setPos(29, 29);
+
+        if(isWin(field, wcom, SIZE))
+            writeLeadtable(min, sec, movCount, Lead, leadSIZE);
+
     system("pause");
     }
-
-////Функция записи в таблицу лидеров
-
-////Функция показа таблицы лидеров
-void showlederboard()
-{
-
-}
 
 //навигация в майн меню
 void menuNav(bool& isgamerun)
@@ -353,20 +424,17 @@ void menuNav(bool& isgamerun)
         load = true;
         game(load);
     }   
-    else if (idStep == 116 || idStep == 84)
+    else if (idStep == Move::Tab)
         showlederboard();
     else
         game(load);
 
 }
 
-////таймер раунда
-
 //функция игры
 void tagGame()
 {
     bool isgamerun = true;
-
     while (isgamerun)
     {
         drawHiscreen();
