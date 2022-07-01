@@ -325,69 +325,10 @@ void saveTop5(Top5* Lead, const int& leadSIZE)
     fclose(file);
 }
 
-//
-////////мен€ем местами значени€ в масиве
-//void swap(int* arr, int left, int right)
-//{
-//	//// переменна€ временного буфера
-//	int temp{};
-//
-//	if (left != right)
-//	{
-//		temp = arr[left];
-//		arr[left] = arr[right];
-//		arr[right] = temp;
-//	}
-//}
-//
-////////условие сортировки от меньшего к большему
-//bool isLeftLargeRight(int left, int right)
-//{
-//	return left > right;
-//}
-//
-//////условие сортировки от большего к меньшему
-//bool isLeftSmallRight(int left, int right)
-//{
-//	return left < right;
-//}
-//
-///////// функци€ сортировки масива пузырьковым методом.
-//void sorting(Top5* Lead, const int& leadSIZE, bool(*fn)(int,int))
-//{
-//	bool isFinish = false;
-//	
-//	////цикл сравнени€ елементов масива
-//	do
-//	{
-//		isFinish = false;
-//
-//		for (int i{ 1 }; i < leadSIZE; i++)
-//		{
-//			if (fn(arr[i - 1], arr[i]))
-//			{
-//				swap(arr, i - 1, i);
-//				isFinish = true;
-//			}
-//		}
-//
-//
-//	} while (isFinish != false);
-//}
-//
-
-
-
-
-
-
-
-
 ////‘ункци€ записи в таблицу лидеров
 void writeLeadtable(int& min, int& sec, int& movCount, Top5* Lead, const int& leadSIZE)
 {
     loadTop5(Lead, leadSIZE);
-
 
     for (int i{}; i < leadSIZE; ++i)
     {
@@ -425,10 +366,10 @@ void game(bool& load)
     int min{}, sec{};
     time_t zerotime = time(0);
     //// генераци€ рандомного пол€
-    //int* field = genereteField(SIZE);
+    int* field = genereteField(SIZE);
     
     ///// ƒл€ дебага
-    int* field = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0,15};
+    ///int* field = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0,15};
 
     //// победна€ комбинаци€
     const int* wcom = new int[SIZE] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
